@@ -14,6 +14,7 @@
 
   const subtitles = parseSRT(srtText);
   let isEnabled = true;
+  let originalFontSize = 2; // Store original font size in vw
 
   const playerContainer =
     document.querySelector("#movie_player") ||
@@ -48,6 +49,7 @@
       }
     }
 
+    originalFontSize = settings.fontSize;
     subtitleDiv.style.fontSize = settings.fontSize + "vw";
 
     // Text shadow
@@ -96,8 +98,14 @@
       const rtlRegex = /[\u0600-\u06FF]/;
       const dir = rtlRegex.test(rawHTML) ? "rtl" : "ltr";
 
+      // Split text by line breaks and display each line separately
+      const lines = rawHTML.split('\n');
+      const linesHTML = lines.map(line => 
+        `<div class="ray-line">${line}</div>`
+      ).join('');
+      
       // Display text inside background span
-      subtitleDiv.innerHTML = `<span class="ray-bg" style="direction:${dir}; unicode-bidi:plaintext;">${rawHTML}</span>`;
+      subtitleDiv.innerHTML = `<span class="ray-bg" style="direction:${dir}; unicode-bidi:plaintext;">${linesHTML}</span>`;
 
       // Setup background
       const bg = subtitleDiv.querySelector(".ray-bg");
@@ -164,10 +172,29 @@
     div.style.left = `${centerX}px`;
     div.style.bottom = `${bottomPosition}px`;
     div.style.transform = "translateX(-50%)";
-    div.style.width = `${rect.width * 0.95}px`;
-    div.style.maxWidth = "90%";
     div.style.textAlign = "center";
     div.style.pointerEvents = "none";
     div.style.zIndex = "9999";
+    
+    // Reset to original font size before adjusting
+    div.style.fontSize = originalFontSize + "vw";
+    
+    // Smart font size adjustment to prevent overflow
+    setTimeout(() => adjustFontSize(div, rect.width * 0.95), 10);
+  }
+  
+  function adjustFontSize(div, maxWidth) {
+    const bg = div.querySelector('.ray-bg');
+    if (!bg) return;
+    
+    // Get actual width of subtitle
+    const actualWidth = bg.offsetWidth;
+    
+    // If subtitle exceeds max width, scale down font size
+    if (actualWidth > maxWidth) {
+      const scale = maxWidth / actualWidth;
+      const currentFontSize = parseFloat(window.getComputedStyle(div).fontSize);
+      div.style.fontSize = (currentFontSize * scale * 0.98) + 'px'; // 0.98 for safety margin
+    }
   }
 })();
