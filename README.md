@@ -64,7 +64,7 @@ Second subtitle line
 
 ### File Structure
 ```
-├── manifest.json          # Extension manifest
+├── manifest.json         # Extension manifest
 ├── popup.html            # Extension popup UI
 ├── popup.js              # Popup logic
 ├── js/
