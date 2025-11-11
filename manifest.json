@@ -1,0 +1,33 @@
+{
+  "name": "YTSub.srt",
+  "manifest_version": 3,
+  "version": "1.0.1",
+  "description": "Add custom SRT subtitles to any YouTube video. Upload .srt files and enjoy subtitles on YouTube.",
+  "author": "Ray (Abo Arwa)",
+  "icons": {
+    "128": "images/icon.png"
+  },
+  "permissions": ["storage", "activeTab", "scripting"],
+  "content_scripts": [
+    {
+      "matches": ["*://www.youtube.com/watch*"],
+      "js": ["js/srtParser.js", "js/content.js"],
+      "css": ["css/style.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["subtitles/*.srt"],
+      "matches": ["*://www.youtube.com/*"]
+    }
+  ],
+  "action": {
+    "default_title": "YTSub.srt - Custom Subtitles for YouTube",
+    "default_icon": {
+      "128": "images/icon.png"
+    },
+    "default_popup": "popup.html"
+  },
+  "incognito": "split"
+}
+

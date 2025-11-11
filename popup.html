@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>YTSub.srt</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      width: 320px;
+      height: 480px;
+      padding: 0;
+      margin: 0;
+      background: #f5f5f5;
+      color: #222;
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #d63031 0%, #e17055 100%);
+      color: white;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .header h3 { 
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .content {
+      padding: 10px;
+      max-height: none;
+      overflow: hidden;
+    }
+    hr { border: none; border-top: 1px solid #e0e0e0; margin: 8px 0; }
+    label { 
+      display: block; 
+      margin-top: 6px;
+      margin-bottom: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #555;
+    }
+    input[type="file"], input[type="text"] {
+      width: 100%; 
+      margin-bottom: 6px; 
+      padding: 6px;
+      border: 1px solid #ddd; 
+      border-radius: 6px;
+      font-size: 12px;
+      transition: border 0.2s;
+    }
+    input[type="file"]:focus, input[type="text"]:focus {
+      outline: none;
+      border-color: #d63031;
+    }
+    .row { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      gap: 8px;
+    }
+    button {
+      background: #d63031; 
+      color: white; 
+      border: none;
+      padding: 6px 10px; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      transition: all 0.2s;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    button:hover { 
+      background: #b72526;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(214, 48, 49, 0.3);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .btn-secondary {
+      background: #74b9ff;
+    }
+    .btn-secondary:hover {
+      background: #0984e3;
+      box-shadow: 0 2px 8px rgba(9, 132, 227, 0.3);
+    }
+    .btn-success {
+      background: #00b894;
+    }
+    .btn-success:hover {
+      background: #00a083;
+      box-shadow: 0 2px 8px rgba(0, 184, 148, 0.3);
+    }
+    /* Toggle Switch in Header */
+    .header-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .header-toggle-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: white;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 40px;
+      height: 20px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255,255,255,0.3);
+      transition: 0.3s;
+      border-radius: 20px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: rgba(0, 184, 148, 0.5);
+    }
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 5px;
+    }
+    .slider-container input[type="range"] {
+      flex: 1;
+    }
+    .slider-value {
+      font-weight: 600;
+      min-width: 38px;
+      text-align: center;
+      font-size: 12px;
+      color: #333;
+    }
+    /* Font Size Slider - Simple style */
+    #fontSizeSlider {
+      width: 100%;
+      margin: 0;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      border-radius: 3px;
+      background: #ddd;
+      outline: none;
+    }
+    #fontSizeSlider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #d63031;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    #fontSizeSlider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      background: #b72526;
+    }
+    #fontSizeSlider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #d63031;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    #fontSizeSlider::-moz-range-thumb:hover {
+      transform: scale(1.2);
+      background: #b72526;
+    }
+    
+    /* Opacity Sliders - Progress bar style */
+    .opacity-slider {
+      width: 100%;
+      margin: 0;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+      height: 8px;
+      border-radius: 4px;
+      background: transparent;
+      outline: none;
+    }
+    .opacity-slider::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(to right, 
+        #e0e0e0 0%, 
+        #d63031 var(--value, 50%), 
+        #e0e0e0 var(--value, 50%));
+    }
+    .opacity-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #d63031;
+      cursor: pointer;
+      margin-top: -5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: all 0.2s;
+    }
+    .opacity-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+      background: #b72526;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    }
+    .opacity-slider::-moz-range-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: #e0e0e0;
+    }
+    .opacity-slider::-moz-range-progress {
+      height: 8px;
+      border-radius: 4px;
+      background: #d63031;
+    }
+    .opacity-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #d63031;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: all 0.2s;
+    }
+    .opacity-slider::-moz-range-thumb:hover {
+      transform: scale(1.15);
+      background: #b72526;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    }
+    #status { 
+      text-align: center; 
+      font-size: 11px; 
+      margin-top: 5px;
+      padding: 5px;
+      border-radius: 5px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      display: none;
+    }
+    #status:not(:empty) {
+      display: block;
+    }
+    #status.success {
+      background: #d4edda;
+      border-color: #c3e6cb;
+      color: #155724;
+    }
+    #status.error {
+      background: #f8d7da;
+      border-color: #f5c6cb;
+      color: #721c24;
+    }
+    a { 
+      color: #0984e3; 
+      text-decoration: none;
+      font-weight: 500;
+    }
+    a:hover { text-decoration: underline; }
+    .setting-group {
+      background: white;
+      padding: 7px 9px;
+      border-radius: 6px;
+      margin-bottom: 5px;
+      border: 1px solid #e0e0e0;
+    }
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: 10% auto;
+      padding: 15px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 300px;
+      max-height: 380px;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #d63031;
+    }
+    .modal-header h4 {
+      margin: 0;
+      color: #d63031;
+      font-size: 15px;
+    }
+    .close {
+      color: #aaa;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      line-height: 20px;
+    }
+    .close:hover { color: #000; }
+    .video-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .video-item {
+      padding: 8px 75px 8px 8px;
+      margin-bottom: 6px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+      transition: all 0.2s;
+      position: relative;
+      min-height: 65px;
+    }
+    .video-item:hover {
+      background: #e9ecef;
+      border-color: #d63031;
+    }
+    .video-item a {
+      display: block;
+      color: #333;
+      text-decoration: none;
+      font-size: 12px;
+      max-width: calc(100% - 5px);
+    }
+    .video-item strong {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
+      margin-bottom: 3px;
+      font-weight: 600;
+    }
+    .video-item small {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 100%;
+      font-size: 11px;
+    }
+    .video-item a:hover {
+      color: #d63031;
+    }
+    .delete-btn {
+      background: #ff6b6b;
+      padding: 4px 8px;
+      font-size: 10px;
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .delete-btn:hover {
+      background: #ee5a5a;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 15px;
+      color: #999;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h3>YTSub.srt</h3>
+    <div class="header-toggle">
+      <span class="header-toggle-label">Enable</span>
+      <label class="switch">
+        <input type="checkbox" id="toggleSubsCheckbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Upload Section -->
+    <div id="uploadSection">
+      <label>📁 Select subtitle file (.srt)</label>
+      <input type="file" id="srtFile" accept=".srt" />
+      <input type="text" id="videoUrl" placeholder="🔗 YouTube video link (optional)" />
+      <div class="row">
+        <button id="uploadBtn" style="flex: 1;">💾 Save</button>
+        <button id="viewSubsBtn" class="btn-secondary" style="flex: 1;">📋 View List</button>
+      </div>
+      <div id="status"></div>
+    </div>
+
+    <hr />
+
+    <!-- Appearance Settings -->
+    <div id="settingsSection">
+      <div class="setting-group">
+        <label>📏 Font size</label>
+        <div class="slider-container">
+          <input type="range" id="fontSizeSlider" min="10" max="40" value="20" step="1" />
+          <span id="fontSizeLabel" class="slider-value">20px</span>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <label><input type="checkbox" id="shadowToggle" /> 🌑 Enable text shadow</label>
+        <div id="shadowSettings" style="display:none; margin-top: 8px;">
+          <label style="margin-top: 0;">Shadow opacity</label>
+          <div class="slider-container">
+            <input type="range" class="opacity-slider" id="shadowOpacity" min="1" max="100" value="80" />
+            <span id="shadowOpacityLabel" class="slider-value">80%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <label><input type="checkbox" id="bgToggle" /> ⬛ Enable background</label>
+        <div id="bgSettings" style="display:none; margin-top: 8px;">
+          <label style="margin-top: 0;">Background opacity</label>
+          <div class="slider-container">
+            <input type="range" class="opacity-slider" id="bgOpacity" min="1" max="100" value="60" />
+            <span id="bgOpacityLabel" class="slider-value">60%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Subtitles List -->
+  <div id="subsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>📋 Saved Subtitles</h4>
+        <span class="close">&times;</span>
+      </div>
+      <ul id="videoList" class="video-list"></ul>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
