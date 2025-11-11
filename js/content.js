@@ -27,29 +27,40 @@
   // Apply user settings
   const applyUserSettings = async () => {
     const { subtitleSettings } = await chrome.storage.local.get("subtitleSettings");
-    if (!subtitleSettings) return;
+    
+    // Default settings if none exist
+    const defaultSettings = { 
+      fontSize: 2, 
+      shadow: true, 
+      opacity: 80, 
+      background: true, 
+      bgOpacity: 60, 
+      enabled: true 
+    };
+    
+    const settings = subtitleSettings ? { ...defaultSettings, ...subtitleSettings } : defaultSettings;
 
     // Update enabled state
-    if (typeof subtitleSettings.enabled !== "undefined") {
-      isEnabled = subtitleSettings.enabled;
+    if (typeof settings.enabled !== "undefined") {
+      isEnabled = settings.enabled;
       if (!isEnabled) {
         subtitleDiv.innerHTML = "";
       }
     }
 
-    subtitleDiv.style.fontSize = subtitleSettings.fontSize + "vw";
+    subtitleDiv.style.fontSize = settings.fontSize + "vw";
 
     // Text shadow
-    if (subtitleSettings.shadow) {
-      const alpha = (subtitleSettings.opacity || 80) / 100;
+    if (settings.shadow) {
+      const alpha = (settings.opacity || 80) / 100;
       subtitleDiv.style.textShadow = `2px 2px 5px rgba(0,0,0,${alpha.toFixed(2)})`;
     } else {
       subtitleDiv.style.textShadow = "none";
     }
 
     // Background
-    subtitleDiv.dataset.bgEnabled = subtitleSettings.background ? "true" : "false";
-    subtitleDiv.dataset.bgOpacity = subtitleSettings.bgOpacity || 60;
+    subtitleDiv.dataset.bgEnabled = settings.background ? "true" : "false";
+    subtitleDiv.dataset.bgOpacity = settings.bgOpacity || 60;
   };
   await applyUserSettings();
 

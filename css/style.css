@@ -5,7 +5,7 @@
   line-height: 1.3;
   z-index: 9999;
   pointer-events: none;
-  transition: opacity 0.3s;
+  transition: opacity 0.1s;
   opacity: 1;
 }
 
@@ -20,7 +20,7 @@
 }
 
 #ytsub-srt-subtitles:not(:empty) {
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn 0.1s ease;
 }
 
 @keyframes fadeIn {
