@@ -19,7 +19,7 @@ const bgSettings = document.getElementById("bgSettings");
 const bgOpacity = document.getElementById("bgOpacity");
 const bgOpacityLabel = document.getElementById("bgOpacityLabel");
 
-let settings = { fontSize: 2, shadow: true, opacity: 80, background: true, bgOpacity: 60, enabled: true };
+let settings = { fontSize: 1.3, shadow: true, opacity: 80, background: true, bgOpacity: 60, enabled: true };
 
 // Extract Video ID from various sources
 function extractVideoId(input) {
