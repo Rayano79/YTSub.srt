@@ -4,7 +4,10 @@
   "version": "1.0.1",
   "description": "Add custom SRT subtitles to any YouTube video. Upload .srt files and enjoy subtitles on YouTube.",
   "author": "Ray (Abo Arwa)",
+  "homepage_url": "https://github.com/Rayano79/YTSub.srt",
   "icons": {
+    "16": "images/icon-16.png",
+    "48": "images/icon-48.png",
     "128": "images/icon.png"
   },
   "permissions": ["storage", "activeTab", "scripting"],
