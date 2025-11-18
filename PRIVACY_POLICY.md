@@ -31,9 +31,10 @@ YTSub.srt operates entirely on your device. All data is stored locally in your b
 - Used to detect the current YouTube video you're watching
 - Only accessed when you interact with the extension
 
-### Scripting Permission
-- Used to inject subtitle display functionality into YouTube pages
-- Only runs on YouTube watch pages (`*://www.youtube.com/watch*`)
+### Content Scripts
+- The extension uses content scripts (defined in manifest.json) to display subtitles on YouTube pages
+- Content scripts run automatically on YouTube watch pages (`*://www.youtube.com/watch*`)
+- No additional permissions are required for content scripts as they are declared in the manifest
 
 ## Third-Party Services
 

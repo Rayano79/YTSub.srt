@@ -10,7 +10,7 @@
     "48": "images/icon-48.png",
     "128": "images/icon.png"
   },
-  "permissions": ["storage", "activeTab", "scripting"],
+  "permissions": ["storage", "activeTab"],
   "content_scripts": [
     {
       "matches": ["*://www.youtube.com/watch*"],
